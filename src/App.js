@@ -110,7 +110,7 @@ function USE_EFFECT(){
       Just wrap the ThemeContextProvider around a component or the entire application,
       then you can access the context by importing the UseThemeContext function.
 
-       ----------------------------------------------------------------
+      ----------------------------------------------------------------
 
     */
 
@@ -156,17 +156,101 @@ function USE_CONTEXT_PARENT(){
 
 
 
+    /*  
+
+      useReducer() ----------------------------------------------------
+
+      This is an alternative to the useState hook.
+      It makes it so that you can track multiple state variable easily.
+
+      The useReducer hook accept two parameters:
+        A reducer function,
+        The initial state (a javascript object)
+
+      ----------------------------------------------------------------
+
+      The reducer function looks something like this:
+
+        function reducer(state, action){
+          switch(action.type){
+            case 'increment':
+              var tmp = state;
+              tmp.count += 1;
+              return tmp;
+
+            case 'decrement':
+              var tmp = state;
+              tmp.count -= 1;
+              return tmp;
+
+
+            default:
+              return state;
+          }
+
+        }
+
+        You can put any number of actions in the reducer function to manipulate the state however you want.
+
+      ----------------------------------------------------------------
+
+        You define your reducer like this:
+
+          const [state, dispatch] = useReducer(reducer, initialState);
+
+        The dispatch function will fire the reducer function with the object you insert as a parameter.
+        That object will be the parameter "action" in the reducer function.
+
+        For example:
+
+          dispatch({type: "increment"});
+
+        This will increment the counter and update the state.
+
+      ----------------------------------------------------------------
+
+    */
+
+
+    const initialState = {count: 0};
+
+    function counterReducer(prevState, action){
+          switch(action.type){
+            case "increment":
+              return {count: prevState.count + 1};
+  
+            case "decrement":
+              return {count: prevState.count - 1};
+  
+            default: return prevState;
+          }  
+  };
+
+
+  function USE_REDUCER(){    
+
+    const [state, dispatch] = useReducer(counterReducer, initialState);
+    
+    console.log(state);
+
+    return (<div className="use-reducer-contianer">
+        <p>{state.count}</p>
+
+        <button onClick={() => {dispatch({type: "increment"});}}>+</button>
+        <button onClick={() => {dispatch({type: "decrement"});}}>-</button>
+    </div>);
+  }
 
 function App(){
     return (<div>
         <USE_EFFECT />
         <USE_CONTEXT_PARENT />
-
-
+        <USE_REDUCER />
     </div>);
 }
 
 
-    
+
+
 
 export default App;
